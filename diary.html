@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Mentalog Diary</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link href="diary.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+  </head>
+
+  <body>
+  <header>
+        <nav> 
+          <a href="index.html">Home</a>
+          <a href="talk.html">Talk now</a>
+          <a href="diary.html">Diary</a>
+        </nav>
+  </header>
+
+  <h1 class="title1">My Diary</h1>
+  <div class="section">
+    <i class="fas fa-arrow-circle-left"></i>
+    <div class="page">
+      <div class="content">
+        <div class="flex">
+          <h2 class="title2">Date: </h2>
+          <input class="input-field" type="date">
+        </div>
+        <div class="flex">
+          <h2 class="title2">Emotion: </h2>
+          <input class="input-field">
+        </div>
+          <div class="grid">
+            <h2 class="title2">Log: </h2>
+            <textarea           class="textarea-field"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <i class="fas fa-arrow-circle-right"></i>
+  </div>
+
+<script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
+<script src="/__/firebase/8.2.8/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
+<script src="/__/firebase/8.2.8/firebase-database.js"></script>
+
+<script>
+  var config = {
+    apiKey: "AIzaSyASnmGPBSxHtJmOUcvCNr2KKxIYoLxlUFQ",
+    authDomain: "mentalog-e014f.firebaseapp.com",
+    projectId: "mentalog-e014f",
+    storageBucket: "mentalog-e014f.appspot.com",
+    messagingSenderId: "829775863348",
+    appId: "1:829775863348:web:bc187eac6bb1db4ba8b461",
+    measurementId: "G-FQQ4BE9GVT"
+    databaseURL: "https://mentalog-e014f-default-rtdb.firebaseio.com/",
+    storageBucket: "bucket.appspot.com"
+  };
+  firebase.initializeApp(config);
+
+  //Get a reference to the database service
+  var database = firebase.database();
+
+  function writeUserData(userId) {
+  firebase.database().ref('users/' + userId).set({
+
+  });
+}
+
+
+
+
+  window.addEventListener("DOMContentLoaded", () => {
+        const button = document.getElementById("button");
+        const result = document.getElementById("result");
+        const main = document.getElementsByTagName("main")[0];
+        let listening = false;
+        const SpeechRecognition =
+          window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (typeof SpeechRecognition !== "undefined") {
+          const recognition = new SpeechRecognition();
+
+          const stop = () => {
+            main.classList.remove("speaking");
+            recognition.stop();
+            button.textContent = "Start listening";
+          };
+
+          const start = () => {
+            main.classList.add("speaking");
+            recognition.start();
+            button.textContent = "Stop listening";
+          };
+
+          const onResult = event => {
+            result.innerHTML = "";
+            for (const res of event.results) {
+              const text = document.createTextNode(res[0].transcript);
+              const p = document.createElement("p");
+              p.id = 'speechResult'
+              if (res.isFinal) {
+                p.classList.add("final");
+              }
+              p.appendChild(text);
+              result.appendChild(p);
+
+            }
+          };
+          recognition.continuous = true;
+          recognition.interimResults = true;
+          recognition.addEventListener("result", onResult);
+          button.addEventListener("click", event => {
+            listening ? stop() : start();
+            listening = !listening;
+          });
+        } else {
+          button.remove();
+          const message = document.getElementById("message");
+          message.removeAttribute("hidden");
+          message.setAttribute("aria-hidden", "false");
+        }
+      });
+
+  var clicked = 0
+  
+  function questionshower() {
+    var msg = "Thank you for talking with us"
+    if (clicked == 0) {
+      msg = "How are you feeling today? are you mad, sad, neutral, or happy?"
+      document.getElementById("checker").innerHTML = "Next";
+    }
+    if (clicked == 1) {
+      var mood = document.getElementById("speechResult").innerHTML
+      msg = "Tell us why you are feeling that way, or tell us about your day!"
+      //push mood into database move here?
+      if (mood.includes("sad")){
+        document.getElementById("moodimg").src = "pic/sad.png";
+      }
+      else if (mood.includes("good")){
+        document.getElementById("moodimg").src = "pic/good.png";
+      }
+      else if (mood.includes("mad")){
+        document.getElementById("moodimg").src = "pic/mad.png";
+      }
+      else {
+        document.getElementById("moodimg").src = "pic/neutral.png";
+      }
+      document.getElementById("checker").innerHTML = "End session";
+
+    }
+
+    if (clicked == 2) {
+      msg = "Thank you for talking with us, if you are logged in, todays session could be viewed in the diary page! Great job, you beautifully express your feelings"  
+    }
+    
+    document.getElementById("question").innerHTML = (msg);
+    var msg = new SpeechSynthesisUtterance(msg);
+    window.speechSynthesis.speak(msg);
+    clicked = clicked + 1;
+  }
+  
+  function test() {
+    msg = "test"
+    document.getElementById("question").innerHTML = msg;
+    
+  }
+
+  document.getElementById("checker").addEventListener("click", questionshower);
+
+
+ firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    // User is signed in.
+
+    var user = firebase.auth().currentUser;
+
+    if(user != null){
+
+      document.getElementById("login").innerHTML = "<a href='login.html' id='loginlink'>Welcome Back!</a>"
+
+    }
+
+  } else {
+    // No user is signed in.
+    document.getElementById("login").innerHTML = "<a href='login.html' id='loginlink'>Log In</a>"
+
+  }
+});
+
+ writeUserData()
+
+      
+</script>
+</body>
+</html>

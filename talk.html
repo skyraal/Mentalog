@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VirtualAssistant</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="talk.css">
+</head>
+
+  <header>
+        <nav> 
+          <a href="index.html">Home</a>
+          <a href="talk.html">Talk now</a>
+          <a href="diary.html">Diary</a>
+          <div id="login"></div>
+        </nav>
+  </header>
+
+<body>
+  <p id="question"></p>
+  <div class="logocontainer">
+   <img class="panda" src="pic/panda.png">
+  </div>
+  <main>
+      <div class="buttons">
+      <button id="button" class="startbutton">Start listening</button>
+      <p id="message" hidden aria-hidden="true">
+        Your browser doesn't support Speech Recognition. Sorry.
+      </p>
+      <button id="checker" class="startbutton" onclick="questionshower">Start</button>
+      </div>
+      <div id="result"></div>
+    </main>
+ <div id="moodcontainer">
+   <p id="mood">Your current mood is:</p>
+   <img src="" id="moodimg">
+ </div>
+ <div id="label-container"></div>
+  
+</body>
+<script>
+
+  window.addEventListener("DOMContentLoaded", () => {
+        const button = document.getElementById("button");
+        const result = document.getElementById("result");
+        const main = document.getElementsByTagName("main")[0];
+        let listening = false;
+        const SpeechRecognition =
+          window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (typeof SpeechRecognition !== "undefined") {
+          const recognition = new SpeechRecognition();
+
+          const stop = () => {
+            main.classList.remove("speaking");
+            recognition.stop();
+            button.textContent = "Start listening";
+          };
+
+          const start = () => {
+            main.classList.add("speaking");
+            recognition.start();
+            button.textContent = "Stop listening";
+          };
+
+          const onResult = event => {
+            result.innerHTML = "";
+            for (const res of event.results) {
+              const text = document.createTextNode(res[0].transcript);
+              const p = document.createElement("p");
+              p.id = 'speechResult'
+              if (res.isFinal) {
+                p.classList.add("final");
+              }
+              p.appendChild(text);
+              result.appendChild(p);
+
+            }
+          };
+          recognition.continuous = true;
+          recognition.interimResults = true;
+          recognition.addEventListener("result", onResult);
+          button.addEventListener("click", event => {
+            listening ? stop() : start();
+            listening = !listening;
+          });
+        } else {
+          button.remove();
+          const message = document.getElementById("message");
+          message.removeAttribute("hidden");
+          message.setAttribute("aria-hidden", "false");
+        }
+      });
+
+  var clicked = 0
+  
+  function questionshower() {
+    var msg = "Thank you for talking with us"
+    if (clicked == 0) {
+      msg = "How are you feeling today? are you mad, sad, neutral, or happy?"
+      document.getElementById("checker").innerHTML = "Next";
+    }
+    if (clicked == 1) {
+      var mood = document.getElementById("speechResult").innerHTML
+      msg = "Tell us why you are feeling that way, or tell us about your day!"
+      //push mood into database move here?
+      if (mood.includes("sad")){
+        document.getElementById("moodimg").src = "pic/sad.png";
+      }
+      else if (mood.includes("good")){
+        document.getElementById("moodimg").src = "pic/good.png";
+      }
+      else if (mood.includes("mad")){
+        document.getElementById("moodimg").src = "pic/mad.png";
+      }
+      else {
+        document.getElementById("moodimg").src = "pic/neutral.png";
+      }
+      document.getElementById("checker").innerHTML = "End session";
+
+    }
+
+    if (clicked == 2) {
+      msg = "Thank you for talking with us, if you are logged in, todays session could be viewed in the diary page! Great job, you beautifully express your feelings"  
+    }
+    
+    document.getElementById("question").innerHTML = (msg);
+    var msg = new SpeechSynthesisUtterance(msg);
+    window.speechSynthesis.speak(msg);
+    clicked = clicked + 1;
+  }
+  
+  function test() {
+    msg = "test"
+    document.getElementById("question").innerHTML = msg;
+    
+  }
+
+  document.getElementById("checker").addEventListener("click", questionshower);
+
+
+ firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    // User is signed in.
+
+    var user = firebase.auth().currentUser;
+
+    if(user != null){
+
+      document.getElementById("login").innerHTML = "<a href='login.html' id='loginlink'>Welcome Back!</a>"
+
+    }
+
+  } else {
+    // No user is signed in.
+    document.getElementById("login").innerHTML = "<a href='login.html' id='loginlink'>Log In</a>"
+
+  }
+});
+
+
+      
+</script>
+</html>

@@ -1,0 +1,62 @@
+.title1 {
+  text-align: center;
+  font-size: 2vw;
+}
+
+.title2 {
+  background: white;
+  color: black;
+  font-size: 1.5vw;
+}
+
+.section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1vw;
+  color: black;
+}
+
+.page {
+  display: grid;
+  align-items: center;
+  background: white;
+  border-radius: 10px;
+  width: 80%;
+  margin: 10px auto 40px auto;
+  padding-bottom: 20px;
+}
+
+.content {
+  margin: 0 5% 0 5%;
+}
+
+.grid {
+  display: grid;
+  background: white;
+  color: black;
+}
+
+.flex {
+  display: flex;
+  background: white;
+  color: black;
+}
+
+.input-field {
+  background: white;
+  border: 1px solid black;
+  border-radius: 10px;
+  font-size: 1vw;
+  height: 30px;
+  margin: auto 20px;
+  color: black;
+}
+
+.textarea-field {
+  background: white;
+  border: 1px solid black;
+  border-radius: 10px;
+  font-size: 1vw;
+  color: black;
+}

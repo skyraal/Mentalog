@@ -1,0 +1,38 @@
+.signup {
+  
+}
+
+.login {
+  
+
+}
+
+.card {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  border-radius: 10px;
+  width: 50%;
+  margin: 10px auto 30px auto;
+  padding-bottom: 20px;
+}
+
+.title1 {
+  background: white;
+  color: black;
+  text-align: center;
+}
+
+.title2 {
+  background: white;
+  color: black;
+  font-size: 3.5vw;
+}
+
+.input-field {
+  background: white;
+  border: 1px solid black;
+  border-radius: 10px;
+  font-size: 3vw;
+}

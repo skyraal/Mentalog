@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Mentalog</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <header>
+        <nav> 
+          <a href="index.html">Home</a>
+          <a href="talk.html">Talk now</a>
+          <a href="diary.html">Diary</a>
+          <div id="login"></div>
+        </nav>
+  </header>
+<body>
+  <img src="pic/logo.png" class="logo">
+  <div class="title">
+   <h1>Mentalog</h1>
+   <h3 id="tagline">A virtual assistant to help you log and let out all of your feelings</h3>
+  </div>
+  <div class="buttonhome">
+    <a href="talk.html" class="homebutton" id="start">Start now</a>
+  </div>
+  <!--- firebase ---->
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
+<script src="/__/firebase/8.2.8/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
+<script>
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  var firebaseConfig = {
+    apiKey: "AIzaSyASnmGPBSxHtJmOUcvCNr2KKxIYoLxlUFQ",
+    authDomain: "mentalog-e014f.firebaseapp.com",
+    projectId: "mentalog-e014f",
+    storageBucket: "mentalog-e014f.appspot.com",
+    messagingSenderId: "829775863348",
+    appId: "1:829775863348:web:bc187eac6bb1db4ba8b461",
+    measurementId: "G-FQQ4BE9GVT"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    // User is signed in.
+
+    var user = firebase.auth().currentUser;
+
+    if(user != null){
+
+      document.getElementById("login").innerHTML = "<a href='login.html' id='loginlink'>Welcome</a>"
+
+    }
+
+  } else {
+    // No user is signed in.
+    document.getElementById("login").innerHTML = "<a href='login.html' id='loginlin'>Log In</a>"
+
+  }
+});
+</script>
+</body>
+</html>
